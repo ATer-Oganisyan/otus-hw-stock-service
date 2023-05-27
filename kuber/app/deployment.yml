@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-service-deployment
+  name: stock-service-deployment
   labels:
-    app: order-service
+    app: stock-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: order-service
+      app: stock-service
   template:
     metadata:
       labels:
-        app: order-service
+        app: stock-service
     spec:
       containers:
-      - name: order-service
-        image: arsenteroganisyan/order-service:v20
+      - name: stock-service
+        image: arsenteroganisyan/stock-service:v1
 
         ports:
         - containerPort: 8000
