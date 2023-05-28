@@ -18,13 +18,13 @@ public class StockService {
     static Connection connection = null;
 
     public static void main(String[] args) throws Exception {
-        String version = args[0];
-        String host = args[1];
-        String port = args[2];
-        String user = args[3];
-        String password = args[4];
-        String db = args[5];
-        System.out.println("Hardcode version: v1");
+        String version = args[5];
+        String host = args[0];
+        String port = args[1];
+        String user = args[2];
+        String password = args[3];
+        String db = args[4];
+        System.out.println("Hardcode version: v2");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
