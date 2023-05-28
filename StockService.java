@@ -24,7 +24,7 @@ public class StockService {
         String user = args[2];
         String password = args[3];
         String db = args[4];
-        System.out.println("Hardcode version: v11");
+        System.out.println("Hardcode version: v12");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
@@ -325,7 +325,7 @@ public class StockService {
             while (rs.next()) {
                 String itemId = "" + rs.getInt(1);
                 String cnt = rs.getString(2);
-                r = "item:" + itemId + ",cnt:" + itemId;
+                r = "item:" + itemId + ",cnt:" + cnt;
                 items.add(r);
             }
             r = String.join("\n", items);
