@@ -9,4 +9,4 @@ WORKDIR /www
 RUN apk update
 RUN apk add openjdk11
 RUN apk add git && git clone https://github.com/ATer-Oganisyan/otus-hw-stock-service.git && cd otus-hw-stock-service && jar xf mysql.jar && javac StockService.java && apk del git && rm StockService.java
-ENTRYPOINT java -classpath /www/otus-hw-stock-service StockService $HOST $PORT $USER $PASSWRORD $DB v3
+ENTRYPOINT java -classpath /www/otus-hw-stock-service StockService $HOST $PORT $USER $PASSWRORD $DB v4

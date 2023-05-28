@@ -24,7 +24,7 @@ public class StockService {
         String user = args[2];
         String password = args[3];
         String db = args[4];
-        System.out.println("Hardcode version: v3");
+        System.out.println("Hardcode version: v4");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
@@ -65,7 +65,7 @@ public class StockService {
                 createCataologItem(t);
                 System.out.println("matched");
             } else if ("/catalog".equals(path)) {
-                createCataologItem(t);
+                catalog(t);
                 System.out.println("matched");
             } else {
                     String response = "{\"status\": \"not found\"}";
@@ -143,9 +143,10 @@ public class StockService {
             String catalogId = q.get("catalog_id");
             String cnt = q.get("count");
             String orderId = q.get("order_id");
+            String requestId = q.get("request_id");
 
             Statement stmt=connection.createStatement();
-            String sql = "insert into stock (catalog_id, operation_type, order_id, cnt) values (" + catalogId + ", " + operationType + ", " + orderId + ", " + cnt + ")";
+            String sql = "insert into stock (catalog_id, operation_type, order_id, cnt, requestId) values (" + catalogId + ", " + operationType + ", " + orderId + ", " + cnt + ", " + requestId + ")";
             System.out.println("request to database: " + sql);
             stmt.executeUpdate(sql);
             r = "";
@@ -330,7 +331,7 @@ public class StockService {
     }
 
     static private void catalog(HttpExchange t) throws IOException{
-        System.out.println("Read request accepted");
+        System.out.println("Read catalog request accepted");
         String r;
         try {
             Statement stmt=connection.createStatement();
