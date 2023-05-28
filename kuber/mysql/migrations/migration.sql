@@ -10,7 +10,7 @@ price_per_unit INT NOT NULL
 create table stock (
 id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 catalog_id INT NOT NULL,
-opertaion_type TINYINT NOT NULL,
+operation_type TINYINT NOT NULL,
 cnt INT NOT NULL,
 order_id INT NULL,
 request_id VARCHAR(255) NOT NULL UNIQUE KEY,

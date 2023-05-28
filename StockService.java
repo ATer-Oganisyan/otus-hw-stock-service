@@ -24,7 +24,7 @@ public class StockService {
         String user = args[2];
         String password = args[3];
         String db = args[4];
-        System.out.println("Hardcode version: v4");
+        System.out.println("Hardcode version: v5");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
@@ -46,7 +46,7 @@ public class StockService {
             if ("/health".equals(path)) {
                 routeHealth(t);
                 System.out.println("matched");
-            } else if ("/accquire-item".equals(path)) { // by catalog id - TODO
+            } else if ("/accquire-item".equals(path)) { // by catalog id
                 accquireItem(t);
                 System.out.println("accquireItem");
             } else if ("/release-order-items".equals(path)) { // by orderId
@@ -146,7 +146,7 @@ public class StockService {
             String requestId = q.get("request_id");
 
             Statement stmt=connection.createStatement();
-            String sql = "insert into stock (catalog_id, operation_type, order_id, cnt, requestId) values (" + catalogId + ", " + operationType + ", " + orderId + ", " + cnt + ", " + requestId + ")";
+            String sql = "insert into stock (catalog_id, operation_type, order_id, cnt, request_id) values (" + catalogId + ", " + operationType + ", " + orderId + ", " + cnt + ", " + requestId + ")";
             System.out.println("request to database: " + sql);
             stmt.executeUpdate(sql);
             r = "";
@@ -340,7 +340,7 @@ public class StockService {
             while (rs.next()) {
                 String id = "" + rs.getInt(1);
                 String goodCode = rs.getString(2);
-                String goodName = "" + rs.getTimestamp(3).toString();
+                String goodName = "" + rs.getString(3);
                 String goodDescription = rs.getString(4);
                 String measurementUnits = "" + rs.getInt(5);
                 String pricePerUnit = getStatusById(rs.getInt(6));
