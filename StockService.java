@@ -24,7 +24,7 @@ public class StockService {
         String user = args[2];
         String password = args[3];
         String db = args[4];
-        System.out.println("Hardcode version: v13");
+        System.out.println("Hardcode version: v14");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
@@ -98,7 +98,7 @@ public class StockService {
             String cnt = q.get("count");
             String orderId = q.get("order_id");
             String requestId = q.get("request_id");
-            String sql = "select * from stock where request_id = " + requestId;
+            String sql = "select * from stock where request_id = \"" + requestId + "\"";
             Statement stmt=connection.createStatement();
             ResultSet rs=stmt.executeQuery(sql);
             r = "";
