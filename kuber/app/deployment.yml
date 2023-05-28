@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: stock-service
-        image: arsenteroganisyan/stock-service:v7
+        image: arsenteroganisyan/stock-service:v8
 
         ports:
         - containerPort: 8000
