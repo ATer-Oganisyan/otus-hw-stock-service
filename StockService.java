@@ -24,7 +24,7 @@ public class StockService {
         String user = args[2];
         String password = args[3];
         String db = args[4];
-        System.out.println("Hardcode version: v10");
+        System.out.println("Hardcode version: v11");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
@@ -320,7 +320,7 @@ public class StockService {
         String r;
         try {
             Statement stmt=connection.createStatement();
-            ResultSet rs=stmt.executeQuery("select catalog_id, sum(cnt) total_cnt from stock group by item_id");
+            ResultSet rs=stmt.executeQuery("select catalog_id, sum(cnt) total_cnt from stock group by catalog_id");
             List<String> items = new ArrayList<>();
             while (rs.next()) {
                 String itemId = "" + rs.getInt(1);
