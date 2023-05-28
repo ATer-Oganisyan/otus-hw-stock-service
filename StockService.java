@@ -24,7 +24,7 @@ public class StockService {
         String user = args[2];
         String password = args[3];
         String db = args[4];
-        System.out.println("Hardcode version: v14");
+        System.out.println("Hardcode version: v15");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
@@ -289,7 +289,7 @@ public class StockService {
             String requestId = q.get("request_id");
 
             Statement _stmt=connection.createStatement();
-            String selectSql = "select * from stock where request_id = \"" + requestId + " \"";
+            String selectSql = "select * from stock where request_id = \"" + requestId + "\"";
             System.out.println("releaseItem request_id, select sql: " + selectSql);
             ResultSet rs=_stmt.executeQuery(selectSql);
             if (rs.next()) {
@@ -307,7 +307,7 @@ public class StockService {
             System.out.println("releaseItem order_id, select sql: " + selectSql);
             ResultSet _rs = __stmt.executeQuery(selectSql);
             if (_rs.next()) {
-                int totalCnt = _rs.getInt(1);
+                int totalCnt = - _rs.getInt(1);
                 if (totalCnt < cnt) {
                     r = "not enough count";
                     t.sendResponseHeaders(409, r.length());
