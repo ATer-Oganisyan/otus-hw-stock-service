@@ -24,7 +24,7 @@ public class StockService {
         String user = args[2];
         String password = args[3];
         String db = args[4];
-        System.out.println("Hardcode version: v6");
+        System.out.println("Hardcode version: v7");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
@@ -146,7 +146,7 @@ public class StockService {
             String requestId = q.get("request_id");
 
             Statement stmt=connection.createStatement();
-            String sql = "insert into stock (catalog_id, operation_type, order_id, cnt, request_id) values (" + catalogId + ", " + operationType + ", " + orderId + ", " + cnt + ", " + requestId + ")";
+            String sql = "insert into stock (catalog_id, operation_type, order_id, cnt, request_id) values (" + catalogId + ", " + operationType + ", " + orderId + ", " + cnt + ", \"" + requestId + "\")";
             System.out.println("request to database: " + sql);
             stmt.executeUpdate(sql);
             r = "";
