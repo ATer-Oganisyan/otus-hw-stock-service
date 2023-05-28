@@ -24,7 +24,7 @@ public class StockService {
         String user = args[2];
         String password = args[3];
         String db = args[4];
-        System.out.println("Hardcode version: v9");
+        System.out.println("Hardcode version: v10");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
@@ -144,9 +144,10 @@ public class StockService {
             String cnt = q.get("count");
             String requestId = q.get("request_id");
 
-            String sql = "select * from stock where request_id = " + requestId;
+            String sql = "select * from stock where request_id = \"" + requestId + "\"";
             Statement stmt=connection.createStatement();
             ResultSet rs=stmt.executeQuery(sql);
+            System.out.println("fillItem select sql: " + sql);
             r = "";
             if (rs.next()) {
                 r = "duplicate request";
@@ -158,7 +159,7 @@ public class StockService {
 
             stmt=connection.createStatement();
             sql = "insert into stock (catalog_id, operation_type, order_id, cnt, request_id) values (" + catalogId + ", " + operationType + ", null, " + cnt + ", \"" + requestId + "\")";
-            System.out.println("request to database: " + sql);
+            System.out.println("fill item insert to database: " + sql);
             stmt.executeUpdate(sql);
             r = "";
             System.out.println("send headers");
