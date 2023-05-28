@@ -24,7 +24,7 @@ public class StockService {
         String user = args[2];
         String password = args[3];
         String db = args[4];
-        System.out.println("Hardcode version: v8");
+        System.out.println("Hardcode version: v9");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
@@ -142,7 +142,6 @@ public class StockService {
             String operationType = OPERATION_TYPE_FILL + "";
             String catalogId = q.get("catalog_id");
             String cnt = q.get("count");
-            String orderId = q.get("order_id");
             String requestId = q.get("request_id");
 
             String sql = "select * from stock where request_id = " + requestId;
@@ -158,7 +157,7 @@ public class StockService {
             }
 
             stmt=connection.createStatement();
-            sql = "insert into stock (catalog_id, operation_type, order_id, cnt, request_id) values (" + catalogId + ", " + operationType + ", " + orderId + ", " + cnt + ", \"" + requestId + "\")";
+            sql = "insert into stock (catalog_id, operation_type, order_id, cnt, request_id) values (" + catalogId + ", " + operationType + ", null, " + cnt + ", \"" + requestId + "\")";
             System.out.println("request to database: " + sql);
             stmt.executeUpdate(sql);
             r = "";
