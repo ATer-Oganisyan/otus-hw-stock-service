@@ -24,7 +24,7 @@ public class StockService {
         String user = args[2];
         String password = args[3];
         String db = args[4];
-        System.out.println("Hardcode version: v5");
+        System.out.println("Hardcode version: v6");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
@@ -342,7 +342,7 @@ public class StockService {
                 String goodCode = rs.getString(2);
                 String goodName = "" + rs.getString(3);
                 String goodDescription = rs.getString(4);
-                String measurementUnits = "" + rs.getInt(5);
+                String measurementUnits = "" + rs.getString(5);
                 String pricePerUnit = getStatusById(rs.getInt(6));
                 r = "id:" + id + ",goodCode:" + goodCode + ",goodName:" + goodName + ",goodDescription:" + goodDescription + ",measurementUnits:" + measurementUnits + ",pricePerUnit:" + pricePerUnit;
                 items.add(r);
