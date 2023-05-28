@@ -24,7 +24,7 @@ public class StockService {
         String user = args[2];
         String password = args[3];
         String db = args[4];
-        System.out.println("Hardcode version: v12");
+        System.out.println("Hardcode version: v13");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
@@ -107,8 +107,32 @@ public class StockService {
                 System.out.println("send headers");
                 t.sendResponseHeaders(409, r.length());
                 System.out.println("duplicate request");
+                OutputStream os = t.getResponseBody();
+                os.write(r.getBytes());
+                os.close();
                 return;
             }
+
+            stmt=connection.createStatement();
+            sql = "select sum(cnt) total_cnt from stock where catalog_id = " + catalogId + " group by catalog_id";
+            System.out.println("releaseItem order_id, select sql: " + sql);
+            rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                int __cnt = rs.getInt(1);
+                if (__cnt < Integer.valueOf(cnt)) {
+                    r = "not enough count of catalog";
+                    System.out.println("send headers");
+                    System.out.println("not enough count of catalog");
+                    t.sendResponseHeaders(409, r.length());
+                    OutputStream os = t.getResponseBody();
+                    os.write(r.getBytes());
+                    os.close();
+                    return;
+                }
+            }
+
+
             stmt=connection.createStatement();
             sql = "insert into stock (catalog_id, operation_type, order_id, cnt, request_id) values (" + catalogId + ", " + operationType + ", " + orderId + ", -" + cnt + ", \"" + requestId + "\")";
             System.out.println("request to database: " + sql);
