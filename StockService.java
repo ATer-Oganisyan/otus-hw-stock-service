@@ -24,7 +24,7 @@ public class StockService {
         String user = args[2];
         String password = args[3];
         String db = args[4];
-        System.out.println("Hardcode version: v16");
+        System.out.println("Hardcode version: v17");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
@@ -222,18 +222,25 @@ public class StockService {
             Map<String, String> q = postToMap(buf(t.getRequestBody()));
             String orderId = q.get("order_id");
             String sql = "select order_id from cancelled_orders where order_id = " + orderId;
+            System.out.println("Statement stmt=connection.createStatement()");
             Statement stmt=connection.createStatement();
             ResultSet rs=stmt.executeQuery(sql);
+            System.out.println("ResultSet rs=stmt.executeQuery(sql): executed");
             String r = "";
             if (rs.next()) {
+                System.out.println("order not found");
                 r = "";
                 System.out.println("send headers");
                 t.sendResponseHeaders(409, r.length());
                 System.out.println("success");
+                OutputStream os = t.getResponseBody();
+                os.write(r.getBytes());
+                os.close();
                 return;
             }
             stmt=connection.createStatement();
             connection.setAutoCommit(false);
+            System.out.println("connection.setAutoCommit(false)");
             sql = "insert into cancelled_orders (order_id) values (" + orderId + ")";
             System.out.println("sql: " + sql);
             stmt.executeUpdate(sql);
@@ -250,6 +257,7 @@ public class StockService {
             if (valuesToInsert.size() > 0) {
                 String valuesToInsertSql = String.join(", ", values);
                 sql = "insert into stock (catalog_id, cnt, order_id, operation_type) values " + valuesToInsertSql;
+                System.out.println("valuesToInsert.size() > 0, sql: " + sql);
                 stmt.executeUpdate(sql);
             }
             commitTransaction();
@@ -267,6 +275,7 @@ public class StockService {
             os.close();
         } finally {
             try {
+                System.out.println("setAutoCommit = true");
                 connection.setAutoCommit(true);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
