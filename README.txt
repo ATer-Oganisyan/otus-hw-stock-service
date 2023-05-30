@@ -35,7 +35,7 @@ Enjoy :)
 
 To build app container run:
 
-docker build -t arsenteroganisyan/stock-service:v19 /Users/arsen/otus-hw-stock-service --no-cache --platform linux/amd64
+docker build -t arsenteroganisyan/stock-service:v20 /Users/arsen/otus-hw-stock-service --no-cache --platform linux/amd64
 
 
 

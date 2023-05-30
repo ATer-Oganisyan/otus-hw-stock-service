@@ -24,7 +24,7 @@ public class StockService {
         String user = args[2];
         String password = args[3];
         String db = args[4];
-        System.out.println("Hardcode version: v19");
+        System.out.println("Hardcode version: v20");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
@@ -98,6 +98,11 @@ public class StockService {
             String cnt = q.get("count");
             String orderId = q.get("order_id");
             String requestId = q.get("request_id");
+
+            if (isOrderAllReadyCancelled(orderId, t)) {
+                return;
+            }
+
             String sql = "select * from stock where request_id = \"" + requestId + "\"";
             Statement stmt=connection.createStatement();
             ResultSet rs=stmt.executeQuery(sql);
@@ -216,37 +221,43 @@ public class StockService {
         }
     }
 
+    static private boolean isOrderAllReadyCancelled(String orderId, HttpExchange t) throws IOException, SQLException {
+        String sql = "select order_id from cancelled_orders where order_id = " + orderId;
+        System.out.println("isOrderAllReadyCancelled: " + orderId);
+        Statement stmt=connection.createStatement();
+        ResultSet rs=stmt.executeQuery(sql);
+        System.out.println("ResultSet rs=stmt.executeQuery(sql): executed");
+        if (rs.next()) {
+            System.out.println("order allready cancelled");
+            String r = "";
+            System.out.println("send headers");
+            t.sendResponseHeaders(409, r.length());
+            System.out.println("success");
+            OutputStream os = t.getResponseBody();
+            os.write(r.getBytes());
+            os.close();
+            return true;
+        }
+        return false;
+    }
+
     static private void releaseOrderItems(HttpExchange t) throws IOException {
         System.out.println("releaseOrderItems");
         try {
             Map<String, String> q = postToMap(buf(t.getRequestBody()));
             String orderId = q.get("order_id");
-            String sql = "select order_id from cancelled_orders where order_id = " + orderId;
-            System.out.println("Statement stmt=connection.createStatement()");
-            Statement stmt=connection.createStatement();
-            ResultSet rs=stmt.executeQuery(sql);
-            System.out.println("ResultSet rs=stmt.executeQuery(sql): executed");
-            String r = "";
-            if (rs.next()) {
-                System.out.println("order not found");
-                r = "";
-                System.out.println("send headers");
-                t.sendResponseHeaders(409, r.length());
-                System.out.println("success");
-                OutputStream os = t.getResponseBody();
-                os.write(r.getBytes());
-                os.close();
+            if (isOrderAllReadyCancelled(orderId, t)) {
                 return;
             }
-            stmt=connection.createStatement();
+            Statement stmt=connection.createStatement();
             connection.setAutoCommit(false);
             System.out.println("connection.setAutoCommit(false)");
-            sql = "insert into cancelled_orders (order_id) values (" + orderId + ")";
+            String sql = "insert into cancelled_orders (order_id) values (" + orderId + ")";
             System.out.println("sql: " + sql);
             stmt.executeUpdate(sql);
             sql = "select -sum(cnt) total_cnt, catalog_id, order_id from stock where order_id = " + orderId + " group by catalog_id, order_id";
             stmt=connection.createStatement();
-            rs=stmt.executeQuery(sql);
+            ResultSet rs=stmt.executeQuery(sql);
             List<String> valuesToInsert = new ArrayList<>();
             String values = "";
             while (rs.next()) {
@@ -265,7 +276,7 @@ public class StockService {
                 stmt.executeUpdate(sql);
             }
             commitTransaction();
-            r = "";
+            String r = "";
             System.out.println("send headers");
             t.sendResponseHeaders(200, r.length());
             OutputStream os = t.getResponseBody();
@@ -303,6 +314,10 @@ public class StockService {
             int cnt = Integer.valueOf(q.get("count"));
             String orderId = q.get("order_id");
             String requestId = q.get("request_id");
+
+            if (isOrderAllReadyCancelled(orderId, t)) {
+                return;
+            }
 
             Statement _stmt=connection.createStatement();
             String selectSql = "select * from stock where request_id = \"" + requestId + "\"";
