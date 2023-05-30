@@ -13,7 +13,7 @@ catalog_id INT NOT NULL,
 operation_type TINYINT NOT NULL,
 cnt INT NOT NULL,
 order_id INT NULL,
-request_id VARCHAR(255) NOT NULL UNIQUE KEY,
+request_id VARCHAR(255) DEFAULT NULL UNIQUE KEY,
 foreign key (catalog_id) references catalog(id)
 );
 

@@ -24,7 +24,7 @@ public class StockService {
         String user = args[2];
         String password = args[3];
         String db = args[4];
-        System.out.println("Hardcode version: v18");
+        System.out.println("Hardcode version: v19");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
@@ -244,12 +244,13 @@ public class StockService {
             sql = "insert into cancelled_orders (order_id) values (" + orderId + ")";
             System.out.println("sql: " + sql);
             stmt.executeUpdate(sql);
-            sql = "select sum(cnt) total_cnt, catalog_id, order_id from stock where order_id = " + orderId + " group by catalog_id, order_id";
+            sql = "select -sum(cnt) total_cnt, catalog_id, order_id from stock where order_id = " + orderId + " group by catalog_id, order_id";
             stmt=connection.createStatement();
             rs=stmt.executeQuery(sql);
             List<String> valuesToInsert = new ArrayList<>();
             String values = "";
             while (rs.next()) {
+                System.out.println("row");
                 String cnt = "" + rs.getInt(1);
                 String itemId = "" + rs.getString(2);
                 values = "(" + itemId + ", " + cnt + ", " + orderId + ", " + OPERATION_TYPE_RELEASE + ")";
@@ -257,7 +258,7 @@ public class StockService {
             }
 
             if (valuesToInsert.size() > 0) {
-                String valuesToInsertSql = String.join(", ", values);
+                String valuesToInsertSql = String.join(", ", valuesToInsert);
                 System.out.println("values: " + values);
                 sql = "insert into stock (catalog_id, cnt, order_id, operation_type) values " + valuesToInsertSql;
                 System.out.println("valuesToInsert.size() > 0, sql: " + sql);
