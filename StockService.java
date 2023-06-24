@@ -24,7 +24,7 @@ public class StockService {
         String user = args[2];
         String password = args[3];
         String db = args[4];
-        System.out.println("Hardcode version: v20");
+        System.out.println("Hardcode version: v21");
         System.out.println("Config version: " + version);
         System.out.println(host);
         System.out.println(port);
@@ -333,6 +333,8 @@ public class StockService {
                 return;
             }
 
+            /////////????????????
+            /////////????????????
             Statement __stmt=connection.createStatement();
             selectSql = "select sum(cnt) total_cnt from stock where order_id = " + orderId + "";
             System.out.println("releaseItem order_id, select sql: " + selectSql);
@@ -350,6 +352,8 @@ public class StockService {
                     return;
                 }
             }
+            /////////////////////
+            /////////////////////
 
             Statement stmt=connection.createStatement();
             String sql = "insert into stock (catalog_id, operation_type, order_id, cnt, request_id) values (" + catalogId + ", " + operationType + ", " + orderId + ", " + cnt + ", \"" + requestId + "\")";
@@ -411,7 +415,7 @@ public class StockService {
                 String goodName = "" + rs.getString(3);
                 String goodDescription = rs.getString(4);
                 String measurementUnits = "" + rs.getString(5);
-                String pricePerUnit = getStatusById(rs.getInt(6));
+                String pricePerUnit = rs.getInt(6) + "";
                 r = "id:" + id + ",goodCode:" + goodCode + ",goodName:" + goodName + ",goodDescription:" + goodDescription + ",measurementUnits:" + measurementUnits + ",pricePerUnit:" + pricePerUnit;
                 items.add(r);
             }
